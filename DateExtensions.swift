@@ -163,3 +163,54 @@ extension Int {
     }
     
 }
+
+extension NSDate {
+    
+    func diff(date : NSDate) -> NSDateComponents {
+        let result : NSDateComponents
+        if ((NSCalendar.currentCalendar().components(NSCalendarUnit.Day, fromDate: self, toDate: date, options: NSCalendarOptions.MatchFirst)).day > 0) {
+            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: self, toDate: date, options: NSCalendarOptions.MatchFirst)
+        } else {
+            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: date, toDate: self, options: NSCalendarOptions.MatchFirst)
+        }
+        return result
+    }
+    
+    func offset(offsetAmount : Int) -> NSDate {
+        let newDate = self + offsetAmount.days
+        return newDate
+    }
+    
+    func yearsFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Year, fromDate: date, toDate: self, options: []).year
+    }
+    func monthsFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Month, fromDate: date, toDate: self, options: []).month
+    }
+    func weeksFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.WeekOfYear, fromDate: date, toDate: self, options: []).weekOfYear
+    }
+    func daysFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Day, fromDate: date, toDate: self, options: []).day
+    }
+    func hoursFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Hour, fromDate: date, toDate: self, options: []).hour
+    }
+    func minutesFrom(date: NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Minute, fromDate: date, toDate: self, options: []).minute
+    }
+    func secondsFrom(date: NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Second, fromDate: date, toDate: self, options: []).second
+    }
+    func offsetFrom(date: NSDate) -> String {
+        if yearsFrom(date)   > 0 { return "\(yearsFrom(date))y"   }
+        if monthsFrom(date)  > 0 { return "\(monthsFrom(date))M"  }
+        if weeksFrom(date)   > 0 { return "\(weeksFrom(date))w"   }
+        if daysFrom(date)    > 0 { return "\(daysFrom(date))d"    }
+        if hoursFrom(date)   > 0 { return "\(hoursFrom(date))h"   }
+        if minutesFrom(date) > 0 { return "\(minutesFrom(date))m" }
+        if secondsFrom(date) > 0 { return "\(secondsFrom(date))s" }
+        return ""
+    }
+    
+}
