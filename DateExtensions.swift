@@ -168,16 +168,18 @@ extension NSDate {
     
     func diff(date : NSDate) -> NSDateComponents {
         let result : NSDateComponents
-        if ((NSCalendar.currentCalendar().components(NSCalendarUnit.Day, fromDate: self, toDate: date, options: NSCalendarOptions.MatchFirst)).day > 0) {
-            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: self, toDate: date, options: NSCalendarOptions.MatchFirst)
+        let normSdate = self.normalize()
+        let normEdate = date.normalize()
+        if ((NSCalendar.currentCalendar().components(NSCalendarUnit.Day, fromDate: normSdate, toDate: normEdate, options: NSCalendarOptions.MatchFirst)).day > 0) {
+            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: normSdate, toDate: normEdate, options: NSCalendarOptions.MatchFirst)
         } else {
-            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: date, toDate: self, options: NSCalendarOptions.MatchFirst)
+            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: normEdate, toDate: normSdate, options: NSCalendarOptions.MatchFirst)
         }
         return result
     }
     
     func offset(offsetAmount : Int) -> NSDate {
-        let newDate = self + offsetAmount.days
+        let newDate = self.normalize() + offsetAmount.days
         return newDate
     }
     
@@ -212,5 +214,11 @@ extension NSDate {
         if secondsFrom(date) > 0 { return "\(secondsFrom(date))s" }
         return ""
     }
+  
+  func normalize() -> NSDate {
+    let calendar = NSCalendar.currentCalendar()
+    let components = calendar.components([ .Year, .Month, .Day ] , fromDate: self)
+    return calendar.dateFromComponents(components)!
+  }
     
 }
