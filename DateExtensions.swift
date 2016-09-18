@@ -12,53 +12,53 @@ import Foundation
 
 // The addition and subtraction code is nearly the same,
 // so we've factored it out into this method
-func combineComponents(lhs: NSDateComponents,
-                       rhs: NSDateComponents,
+func combineComponents(_ lhs: DateComponents,
+                       rhs: DateComponents,
                        _ multiplier: Int = 1)
-    -> NSDateComponents
+    -> DateComponents
 {
-    let result = NSDateComponents()
+    var result = DateComponents()
     let undefined = Int(NSDateComponentUndefined)
     
-    result.second = ((lhs.second != undefined ? lhs.second : 0) +
-        (rhs.second != undefined ? rhs.second : 0) * multiplier)
-    result.minute = ((lhs.minute != undefined ? lhs.minute : 0) +
-        (rhs.minute != undefined ? rhs.minute : 0) * multiplier)
-    result.hour = ((lhs.hour != undefined ? lhs.hour : 0) +
-        (rhs.hour != undefined ? rhs.hour : 0) * multiplier)
-    result.day = ((lhs.day != undefined ? lhs.day : 0) +
-        (rhs.day != undefined ? rhs.day : 0) * multiplier)
-    result.month = ((lhs.month != undefined ? lhs.month : 0) +
-        (rhs.month != undefined ? rhs.month : 0) * multiplier)
-    result.year = ((lhs.year != undefined ? lhs.year : 0) +
-        (rhs.year != undefined ? rhs.year : 0) * multiplier)
+    result.second = ((lhs.second! != undefined ? lhs.second! : 0) +
+        (rhs.second! != undefined ? rhs.second! : 0) * multiplier)
+    result.minute = ((lhs.minute! != undefined ? lhs.minute! : 0) +
+        (rhs.minute! != undefined ? rhs.minute! : 0) * multiplier)
+    result.hour = ((lhs.hour! != undefined ? lhs.hour! : 0) +
+        (rhs.hour! != undefined ? rhs.hour! : 0) * multiplier)
+    result.day = ((lhs.day! != undefined ? lhs.day! : 0) +
+        (rhs.day! != undefined ? rhs.day! : 0) * multiplier)
+    result.month = ((lhs.month! != undefined ? lhs.month! : 0) +
+        (rhs.month! != undefined ? rhs.month! : 0) * multiplier)
+    result.year = ((lhs.year! != undefined ? lhs.year! : 0) +
+        (rhs.year! != undefined ? rhs.year! : 0) * multiplier)
     return result
 }
 
 // With combineComponents defined,
 // overloading + and - is simple
 
-func +(lhs: NSDateComponents, rhs: NSDateComponents) -> NSDateComponents
+func +(lhs: DateComponents, rhs: DateComponents) -> DateComponents
 {
     return combineComponents(lhs, rhs: rhs)
 }
 
-func -(lhs: NSDateComponents, rhs: NSDateComponents) -> NSDateComponents
+func -(lhs: DateComponents, rhs: DateComponents) -> DateComponents
 {
     return combineComponents(lhs, rhs: rhs, -1)
 }
 
 // We'll need to overload unary - so we can negate components
-prefix func -(components: NSDateComponents) -> NSDateComponents {
-    let result = NSDateComponents()
+prefix func -(components: DateComponents) -> DateComponents {
+    var result = DateComponents()
     let undefined = Int(NSDateComponentUndefined)
     
-    if(components.second != undefined) { result.second = -components.second }
-    if(components.minute != undefined) { result.minute = -components.minute }
-    if(components.hour != undefined) { result.hour = -components.hour }
-    if(components.day != undefined) { result.day = -components.day }
-    if(components.month != undefined) { result.month = -components.month }
-    if(components.year != undefined) { result.year = -components.year }
+    if(components.second != undefined) { result.second = -components.second! }
+    if(components.minute != undefined) { result.minute = -components.minute! }
+    if(components.hour != undefined) { result.hour = -components.hour! }
+    if(components.day != undefined) { result.day = -components.day! }
+    if(components.month != undefined) { result.month = -components.month! }
+    if(components.year != undefined) { result.year = -components.year! }
     return result
 }
 
@@ -66,22 +66,22 @@ prefix func -(components: NSDateComponents) -> NSDateComponents {
 // and subtract components from dates
 
 // Date + component
-func +(lhs: NSDate, rhs: NSDateComponents) -> NSDate
+func +(lhs: Date, rhs: DateComponents) -> Date
 {
-    return NSCalendar.currentCalendar().dateByAddingComponents(rhs,
-                                                               toDate: lhs,
+    return (Calendar.current as NSCalendar).date(byAdding: rhs,
+                                                               to: lhs,
                                                                options: [])!
 }
 
 // Component + date
-func +(lhs: NSDateComponents, rhs: NSDate) -> NSDate
+func +(lhs: DateComponents, rhs: Date) -> Date
 {
     return rhs + lhs
 }
 
 // Date - component
 // (Component - date doesn't make sense)
-func -(lhs: NSDate, rhs: NSDateComponents) -> NSDate
+func -(lhs: Date, rhs: DateComponents) -> Date
 {
     return lhs + (-rhs)
 }
@@ -92,119 +92,119 @@ func -(lhs: NSDate, rhs: NSDateComponents) -> NSDate
 
 extension Int {
     
-    var seconds: NSDateComponents {
-        let components = NSDateComponents()
+    var seconds: DateComponents {
+        var components = DateComponents()
         components.second = self;
         return components
     }
     
-    var second: NSDateComponents {
+    var second: DateComponents {
         return self.seconds
     }
     
-    var minutes: NSDateComponents {
-        let components = NSDateComponents()
+    var minutes: DateComponents {
+        var components = DateComponents()
         components.minute = self;
         return components
     }
     
-    var minute: NSDateComponents {
+    var minute: DateComponents {
         return self.minutes
     }
     
-    var hours: NSDateComponents {
-        let components = NSDateComponents()
+    var hours: DateComponents {
+        var components = DateComponents()
         components.hour = self;
         return components
     }
     
-    var hour: NSDateComponents {
+    var hour: DateComponents {
         return self.hours
     }
     
-    var days: NSDateComponents {
-        let components = NSDateComponents()
+    var days: DateComponents {
+        var components = DateComponents()
         components.day = self;
         return components
     }
     
-    var day: NSDateComponents {
+    var day: DateComponents {
         return self.days
     }
     
-    var weeks: NSDateComponents {
-        let components = NSDateComponents()
+    var weeks: DateComponents {
+        var components = DateComponents()
         components.day = 7 * self;
         return components
     }
     
-    var week: NSDateComponents {
+    var week: DateComponents {
         return self.weeks
     }
     
-    var months: NSDateComponents {
-        let components = NSDateComponents()
+    var months: DateComponents {
+        var components = DateComponents()
         components.month = self;
         return components
     }
     
-    var month: NSDateComponents {
+    var month: DateComponents {
         return self.months
     }
     
-    var years: NSDateComponents {
-        let components = NSDateComponents()
+    var years: DateComponents {
+        var components = DateComponents()
         components.year = self;
         return components
     }
     
-    var year: NSDateComponents {
+    var year: DateComponents {
         return self.years
     }
     
 }
 
-extension NSDate {
+extension Date {
     
-    func diff(date : NSDate) -> NSDateComponents {
-        let result : NSDateComponents
+    func diff(_ date : Date) -> DateComponents {
+        let result : DateComponents
         let normSdate = self.normalize()
         let normEdate = date.normalize()
-        if ((NSCalendar.currentCalendar().components(NSCalendarUnit.Day, fromDate: normSdate, toDate: normEdate, options: NSCalendarOptions.MatchFirst)).day > 0) {
-            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: normSdate, toDate: normEdate, options: NSCalendarOptions.MatchFirst)
+        if (((Calendar.current as NSCalendar).components(NSCalendar.Unit.day, from: normSdate, to: normEdate, options: NSCalendar.Options.matchFirst)).day! > 0) {
+            result = (Calendar.current as NSCalendar).components([.year, .month, .day], from: normSdate, to: normEdate, options: NSCalendar.Options.matchFirst)
         } else {
-            result = NSCalendar.currentCalendar().components([.Year, .Month, .Day], fromDate: normEdate, toDate: normSdate, options: NSCalendarOptions.MatchFirst)
+            result = (Calendar.current as NSCalendar).components([.year, .month, .day], from: normEdate, to: normSdate, options: NSCalendar.Options.matchFirst)
         }
         return result
     }
     
-    func offset(offsetAmount : Int) -> NSDate {
+    func offset(_ offsetAmount : Int) -> Date {
         let newDate = self.normalize() + offsetAmount.days
         return newDate
     }
     
-    func yearsFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Year, fromDate: date, toDate: self, options: []).year
+    func yearsFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.year, from: date, to: self, options: []).year!
     }
-    func monthsFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Month, fromDate: date, toDate: self, options: []).month
+    func monthsFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.month, from: date, to: self, options: []).month!
     }
-    func weeksFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.WeekOfYear, fromDate: date, toDate: self, options: []).weekOfYear
+    func weeksFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.weekOfYear, from: date, to: self, options: []).weekOfYear!
     }
-    func daysFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Day, fromDate: date, toDate: self, options: []).day
+    func daysFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.day, from: date, to: self, options: []).day!
     }
-    func hoursFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Hour, fromDate: date, toDate: self, options: []).hour
+    func hoursFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.hour, from: date, to: self, options: []).hour!
     }
-    func minutesFrom(date: NSDate) -> Int{
-        return NSCalendar.currentCalendar().components(.Minute, fromDate: date, toDate: self, options: []).minute
+    func minutesFrom(_ date: Date) -> Int{
+        return (Calendar.current as NSCalendar).components(.minute, from: date, to: self, options: []).minute!
     }
-    func secondsFrom(date: NSDate) -> Int{
-        return NSCalendar.currentCalendar().components(.Second, fromDate: date, toDate: self, options: []).second
+    func secondsFrom(_ date: Date) -> Int{
+        return (Calendar.current as NSCalendar).components(.second, from: date, to: self, options: []).second!
     }
-    func offsetFrom(date: NSDate) -> String {
+    func offsetFrom(_ date: Date) -> String {
         if yearsFrom(date)   > 0 { return "\(yearsFrom(date))y"   }
         if monthsFrom(date)  > 0 { return "\(monthsFrom(date))M"  }
         if weeksFrom(date)   > 0 { return "\(weeksFrom(date))w"   }
@@ -215,10 +215,10 @@ extension NSDate {
         return ""
     }
   
-  func normalize() -> NSDate {
-    let calendar = NSCalendar.currentCalendar()
-    let components = calendar.components([ .Year, .Month, .Day ] , fromDate: self)
-    return calendar.dateFromComponents(components)!
+  func normalize() -> Date {
+    let calendar = Calendar.current
+    let components = (calendar as NSCalendar).components([ .year, .month, .day ] , from: self)
+    return calendar.date(from: components)!
   }
     
 }
