@@ -16,5 +16,5 @@ DateComponent() + Date() will return a Date().
 var newDate = Date().normalize()  // Set the time portion of the date to midnight.<br/> 
 	// Makes date differences work out without any sort of remainders.
 
-var newDate = Date().diff(iotherDate)
+var newDate = Date().diff(otherDate)
 	// Return the difference between the two dates as a DateComponent()
